@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:connectivity_plus/connectivity_plus.dart';
+
+// Navigation and screens
 import 'main_navigation.dart';
 import '/errors/no_internet.dart';
 import '/errors/server_error.dart';
+import 'login_signup/login_screen.dart'; // <-- New import
 
 void main() {
   runApp(const MyApp());
@@ -84,7 +87,7 @@ class _MyAppState extends State<MyApp> {
           ? NoInternetPage(onRetry: _checkInitialStatus)
           : !_serverOnline
           ? ServerErrorPage(onRetry: _checkServerStatus)
-          : const MainNavigation(),
+          : const LoginScreen(), // <- Start from Login
     );
   }
 }

@@ -39,6 +39,8 @@ dependencies:
   connectivity_plus: ^6.1.4
   http: ^1.4.0
   fl_chart: ^1.0.0
+  font_awesome_flutter: ^10.8.0
+  sign_in_button: ^4.0.1
 
 dev_dependencies:
   flutter_test:

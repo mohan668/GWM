@@ -12,7 +12,7 @@ class NoInternetPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/no_internet.png', height: 200), // Optional image
+            Image.asset('assets/images/no_internet.jpg', height: 200), // Optional image
             const SizedBox(height: 24),
             const Text(
               "No Internet Connection",
