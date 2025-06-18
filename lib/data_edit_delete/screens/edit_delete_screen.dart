@@ -34,12 +34,13 @@ class _EditDeleteScreenState extends State<EditDeleteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFF5F5F5),
       appBar: AppBar(
         title: Text(
           "Edit or Delete Data",
           style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
         ),
-        backgroundColor: Colors.transparent,
+        backgroundColor: const Color(0xFFF5F5F5),
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
       ),
