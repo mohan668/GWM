@@ -9,10 +9,10 @@ class AutoSliderCard extends StatefulWidget {
   const AutoSliderCard({super.key});
 
   @override
-  State<AutoSliderCard> createState() => _AutoSliderCardState();
+  State<AutoSliderCard> createState() => AutoSliderCardState();
 }
 
-class _AutoSliderCardState extends State<AutoSliderCard> {
+class AutoSliderCardState extends State<AutoSliderCard> {
   final PageController _pageController = PageController(initialPage: 1000);
   int _currentPage = 1000;
   late Timer _timer;
@@ -36,7 +36,7 @@ class _AutoSliderCardState extends State<AutoSliderCard> {
     });
   }
 
-  /// 📢 Public method to reload entries from Firebase
+  /// Public method to trigger refresh externally
   void refresh() {
     _loadEntries();
   }

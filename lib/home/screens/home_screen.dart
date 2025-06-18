@@ -5,6 +5,7 @@ import '../widgets/sub_card_row.dart';
 import 'package:uicomponentsforgwm/utils/network_checker.dart';
 import '/errors/no_internet.dart';
 import '/errors/server_error.dart';
+import 'package:uicomponentsforgwm/data_edit_delete/screens/edit_delete_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,6 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _loading = true;
   bool _hasInternet = true;
   bool _serverError = false;
+
+  final GlobalKey<AutoSliderCardState> _sliderKey = GlobalKey<AutoSliderCardState>();
 
   @override
   void initState() {
@@ -35,9 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     try {
-      // Simulate API ping or fetch
-      // If this fails, it's a server error
-      await Future.delayed(const Duration(milliseconds: 500)); // or make a real request
+      await Future.delayed(const Duration(milliseconds: 500));
       setState(() {
         _hasInternet = true;
         _serverError = false;
@@ -51,19 +52,25 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _navigateToEditScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditDeleteScreen(
+          onDataUpdated: () => _sliderKey.currentState?.refresh(),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_loading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    if (!_hasInternet) {
-      return NoInternetPage(onRetry: _checkStatus);
-    }
-
-    if (_serverError) {
-      return ServerErrorPage(onRetry: _checkStatus);
-    }
+    if (!_hasInternet) return NoInternetPage(onRetry: _checkStatus);
+    if (_serverError) return ServerErrorPage(onRetry: _checkStatus);
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
@@ -72,11 +79,15 @@ class _HomeScreenState extends State<HomeScreen> {
           physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              CustomAppBar(),
-              AutoSliderCard(),
-              SubCardsGrid(),
-              SizedBox(height: 20),
+            children: [
+              const CustomAppBar(),
+              AutoSliderCard(key: _sliderKey),
+              SubCardsGrid(
+                onDataUpdated: () {
+                  _sliderKey.currentState?.refresh();
+                },
+              ),
+              const SizedBox(height: 20),
             ],
           ),
         ),

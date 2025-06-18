@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:uicomponentsforgwm/data_edit_delete/screens/edit_delete_screen.dart';
-import '../screens/visualize_data_screen.dart'; // Update with correct path
+import '../screens/visualize_data_screen.dart';
 
 class SubCardsGrid extends StatelessWidget {
-  const SubCardsGrid({super.key});
+  final VoidCallback onDataUpdated;
+
+  const SubCardsGrid({super.key, required this.onDataUpdated});
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +36,18 @@ class SubCardsGrid extends StatelessWidget {
                     if (index == 0) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const EditDeleteScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => EditDeleteScreen(
+                            onDataUpdated: onDataUpdated,
+                          ),
+                        ),
                       );
                     } else if (index == 1) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const VisualizeDataScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const VisualizeDataScreen(),
+                        ),
                       );
                     }
                   },
@@ -90,7 +98,9 @@ class SubCardsGrid extends StatelessWidget {
                     if (cardIndex == 2) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const VisualizeDataScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const VisualizeDataScreen(),
+                        ),
                       );
                     } else if (cardIndex == 3) {
                       ScaffoldMessenger.of(context).showSnackBar(

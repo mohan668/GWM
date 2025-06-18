@@ -5,7 +5,9 @@ import 'package:uicomponentsforgwm/models/water_entry.dart';
 import 'package:uicomponentsforgwm/data_edit_delete/widgets/entry_tile.dart';
 
 class EditDeleteScreen extends StatefulWidget {
-  const EditDeleteScreen({super.key});
+  final VoidCallback onDataUpdated;
+
+  const EditDeleteScreen({super.key, required this.onDataUpdated});
 
   @override
   State<EditDeleteScreen> createState() => _EditDeleteScreenState();
@@ -24,6 +26,9 @@ class _EditDeleteScreenState extends State<EditDeleteScreen> {
     setState(() {
       _futureEntries = FirebaseService.fetchEntryData();
     });
+
+    // Trigger refresh on AutoSliderCard as well
+    widget.onDataUpdated();
   }
 
   @override
