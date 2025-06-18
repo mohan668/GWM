@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:uicomponentsforgwm/models/water_entry.dart';
-import 'package:uicomponentsforgwm/services/wifi_service.dart';
+import 'package:uicomponentsforgwm/services/firebase_service.dart';
 import 'package:uicomponentsforgwm/data_edit_delete/widgets/edit_entry_dialog.dart';
 import 'delete_confirmation_dialog.dart';
 
@@ -62,7 +62,7 @@ class EntryTile extends StatelessWidget {
                 );
 
                 if (confirm == true) {
-                  await WaterService.deleteEntry(entry.wellId, entry.date);
+                  await FirebaseService.deleteEntry(entry.wellId, entry.date);
                   onRefresh();
                 }
               },

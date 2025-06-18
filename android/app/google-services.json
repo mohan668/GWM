@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "723623920177",
+    "project_id": "ground-water-management-932be",
+    "storage_bucket": "ground-water-management-932be.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:723623920177:android:47ebe3ece8243f8d49cb10",
+        "android_client_info": {
+          "package_name": "com.example.uicomponentsforgwm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3Os0NX2TKHjynTCF0UvVUFExFXL8aQ9U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

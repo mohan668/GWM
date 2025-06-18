@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import '../../../services/wifi_service.dart';
+import '../../../services/firebase_service.dart';
 
 class EntrySubmitButton extends StatelessWidget {
   final TextEditingController wellIdController;
@@ -62,7 +62,7 @@ class EntrySubmitButton extends StatelessWidget {
               "water_level": double.tryParse(waterLevelText),
             };
 
-            await WaterService.uploadEntryData(data, context);
+            await FirebaseService.uploadEntryData(data, context);
 
             // Clear fields
             wellIdController.clear();

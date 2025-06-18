@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:uicomponentsforgwm/services/wifi_service.dart';
+import 'package:uicomponentsforgwm/services/firebase_service.dart';
 import 'package:uicomponentsforgwm/models/water_entry.dart';
 import 'package:uicomponentsforgwm/data_edit_delete/widgets/entry_tile.dart';
 
@@ -22,7 +22,7 @@ class _EditDeleteScreenState extends State<EditDeleteScreen> {
 
   void _refreshEntries() {
     setState(() {
-      _futureEntries = WaterService.fetchEntryData();
+      _futureEntries = FirebaseService.fetchEntryData();
     });
   }
 

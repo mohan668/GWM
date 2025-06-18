@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../models/water_entry.dart';
-import '../../../services/wifi_service.dart';
+import '../../../services/firebase_service.dart';
 
 class EditEntryDialog extends StatefulWidget {
   final WaterEntry entry;
@@ -103,16 +103,23 @@ class _EditEntryDialogState extends State<EditEntryDialog> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
                   onPressed: () async {
-                    final updated = {
-                      "state": stateController.text,
-                      "village": villageController.text,
-                      "water_level": double.tryParse(waterLevelController.text) ?? 0.0,
-                      "well_id": widget.entry.wellId,
-                      "date": widget.entry.date,
-                    };
-                    await WaterService.uploadEntryData(updated, context);
-                    widget.onUpdate();
-                    Navigator.of(context).pop();
+                    final updatedEntry = WaterEntry(
+                      wellId: widget.entry.wellId,
+                      state: stateController.text,
+                      village: villageController.text,
+                      waterLevel: double.tryParse(waterLevelController.text) ?? 0.0,
+                      date: widget.entry.date,
+                    );
+
+                    try {
+                      await FirebaseService.updateEntry(updatedEntry);
+                      widget.onUpdate();
+                      Navigator.of(context).pop();
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Update failed: $e")),
+                      );
+                    }
                   },
                   child: Text(
                     "Update",

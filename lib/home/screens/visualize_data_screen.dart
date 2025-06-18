@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:uicomponentsforgwm/models/water_entry.dart';
-import 'package:uicomponentsforgwm/services/wifi_service.dart';
+import 'package:uicomponentsforgwm/services/firebase_service.dart';
 import 'package:intl/intl.dart';
 
 class VisualizeDataScreen extends StatefulWidget {
@@ -31,7 +31,7 @@ class _VisualizeDataScreenState extends State<VisualizeDataScreen> {
 
   Future<void> _loadEntries() async {
     try {
-      final entries = await WaterService.fetchEntryData();
+      final entries = await FirebaseService.fetchEntryData();
       setState(() => _allEntries = entries);
     } catch (e) {
       // Handle fetch error if needed
@@ -55,9 +55,9 @@ class _VisualizeDataScreenState extends State<VisualizeDataScreen> {
     // Determine cutoff based on time span
     DateTime cutoff = DateTime(2000);
     final now = DateTime.now();
-    if (selectedTimeSpan == 'Last 7 Days')
+    if (selectedTimeSpan == 'Last 7 Days') {
       cutoff = now.subtract(const Duration(days: 7));
-    else if (selectedTimeSpan == 'Last 30 Days')
+    } else if (selectedTimeSpan == 'Last 30 Days')
       cutoff = now.subtract(const Duration(days: 30));
     else if (selectedTimeSpan == 'This Year')
       cutoff = DateTime(now.year);

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uicomponentsforgwm/models/water_entry.dart';
-import 'package:uicomponentsforgwm/services/wifi_service.dart';
+import 'package:uicomponentsforgwm/services/firebase_service.dart';
 import 'main_card.dart';
 
 class AutoSliderCard extends StatefulWidget {
@@ -36,9 +36,14 @@ class _AutoSliderCardState extends State<AutoSliderCard> {
     });
   }
 
+  /// 📢 Public method to reload entries from Firebase
+  void refresh() {
+    _loadEntries();
+  }
+
   void _loadEntries() async {
     try {
-      final entries = await WaterService.fetchEntryData();
+      final entries = await FirebaseService.fetchEntryData();
       if (mounted) {
         setState(() {
           _entries = entries.reversed.toList();
@@ -68,15 +73,8 @@ class _AutoSliderCardState extends State<AutoSliderCard> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    // If there's no data (empty or failed fetch), show null placeholder MainCard
     if (_entries.isEmpty && _hasError) {
-      return MainCard(
-        wellId: null,
-        state: null,
-        village: null,
-        waterLevel: -1.0,
-        date: null,
-      );
+      return const Center(child: Text("Failed to load data"));
     }
 
     return SizedBox(
