@@ -35,7 +35,6 @@ class MyApp extends StatelessWidget {
         // Color scheme to remove default Material colors
         colorScheme: ColorScheme.fromSeed(
           seedColor: highlightColor,
-          background: backgroundColor,
           surface: backgroundColor,
         ),
 
