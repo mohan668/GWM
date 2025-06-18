@@ -7,16 +7,77 @@ import 'widgets/google_sign_in_button.dart';
 import 'widgets/bottom_richtext_link.dart';
 import 'login_screen.dart';
 import 'package:uicomponentsforgwm/main_navigation.dart';
+import 'package:uicomponentsforgwm/services/auth_service.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final nameController = TextEditingController();
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
 
+class _SignUpScreenState extends State<SignUpScreen> {
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  String? nameError;
+  String? emailError;
+  String? passwordError;
+
+  bool isLoading = false;
+  bool obscurePassword = true;
+
+  Future<void> _handleSignUp() async {
+    setState(() {
+      nameError = null;
+      emailError = null;
+      passwordError = null;
+      isLoading = true;
+    });
+
+    final name = nameController.text.trim();
+    final email = emailController.text.trim();
+    final password = passwordController.text;
+
+    if (name.isEmpty || email.isEmpty || password.isEmpty) {
+      setState(() {
+        nameError = name.isEmpty ? 'Name is required' : null;
+        emailError = email.isEmpty ? 'Email is required' : null;
+        passwordError = password.isEmpty ? 'Password is required' : null;
+        isLoading = false;
+      });
+      return;
+    }
+
+    try {
+      final user = await AuthService.signUp(name, email, password);
+      if (user != null) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const MainNavigation()),
+        );
+      }
+    } catch (e) {
+      final errorMsg = e.toString().toLowerCase();
+      setState(() {
+        if (errorMsg.contains('email')) {
+          emailError = 'Invalid or already registered email';
+        } else if (errorMsg.contains('password')) {
+          passwordError = 'Weak or invalid password';
+        } else {
+          nameError = 'Something went wrong';
+        }
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackgroundColor,
       body: SafeArea(
@@ -52,43 +113,36 @@ class SignUpScreen extends StatelessWidget {
                         hintText: 'Enter your name',
                         obscureText: false,
                         controller: nameController,
+                        errorText: nameError,
                       ),
                       const SizedBox(height: 20),
                       CustomTextField(
                         hintText: 'Enter your email',
                         obscureText: false,
                         controller: emailController,
+                        errorText: emailError,
                       ),
                       const SizedBox(height: 20),
                       CustomTextField(
                         hintText: 'Create a password',
-                        obscureText: true,
+                        obscureText: obscurePassword,
                         controller: passwordController,
+                        errorText: passwordError,
                       ),
                       const SizedBox(height: 30),
                       GradientButton(
-                        text: 'Sign Up',
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const MainNavigation()),
-                          );
-                          // TODO: Sign up logic
-                        },
+                        text: isLoading ? 'Creating...' : 'Sign Up',
+                        onPressed: isLoading ? null : _handleSignUp,
                       ),
                       const SizedBox(height: 30),
                       GoogleSignInBtn(
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (_) => const MainNavigation()),
+                            MaterialPageRoute(builder: (_) => const MainNavigation()),
                           );
-                          // TODO: Google signup logic
                         },
                       ),
-
                       const SizedBox(height: 20),
                       Center(
                         child: BottomRichTextLink(
@@ -97,8 +151,7 @@ class SignUpScreen extends StatelessWidget {
                           onTap: () {
                             Navigator.pushReplacement(
                               context,
-                              MaterialPageRoute(
-                                  builder: (_) => const LoginScreen()),
+                              MaterialPageRoute(builder: (_) => const LoginScreen()),
                             );
                           },
                         ),
@@ -113,6 +166,7 @@ class SignUpScreen extends StatelessWidget {
                           color: Colors.grey,
                         ),
                       ),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),

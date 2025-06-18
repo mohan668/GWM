@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../utils/constants.dart';
 import 'widgets/custom_text_field.dart';
 import 'widgets/gradient_button.dart';
@@ -8,14 +9,57 @@ import 'widgets/bottom_richtext_link.dart';
 import '../main_navigation.dart';
 import 'signup_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
+  State<LoginScreen> createState() => _LoginScreenState();
+}
 
+class _LoginScreenState extends State<LoginScreen> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  String? emailError;
+  String? passwordError;
+  bool isLoading = false;
+
+  Future<void> loginUser() async {
+    setState(() {
+      emailError = null;
+      passwordError = null;
+      isLoading = true;
+    });
+
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const MainNavigation()),
+      );
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        if (e.code == 'user-not-found') {
+          emailError = 'No user found with this email';
+        } else if (e.code == 'wrong-password') {
+          passwordError = 'Incorrect password';
+        } else {
+          emailError = 'Login failed: ${e.message}';
+        }
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackgroundColor,
       body: SafeArea(
@@ -51,28 +95,25 @@ class LoginScreen extends StatelessWidget {
                         hintText: 'Enter your email',
                         obscureText: false,
                         controller: emailController,
+                        errorText: emailError,
                       ),
                       const SizedBox(height: 20),
                       CustomTextField(
                         hintText: 'Enter your password',
                         obscureText: true,
                         controller: passwordController,
+                        errorText: passwordError,
                       ),
                       const SizedBox(height: 30),
                       GradientButton(
-                        text: 'Sign In',
-                        onPressed: () {
-                          // TODO: Add login API integration here
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const MainNavigation()),
-                          );
-                        },
+                        text: isLoading ? 'Signing In...' : 'Sign In',
+                        onPressed: isLoading ? null : () => loginUser(),
                       ),
+
                       const SizedBox(height: 30),
                       GoogleSignInBtn(
                         onPressed: () {
+                          // Placeholder for Google login
                           Navigator.push(
                             context,
                             MaterialPageRoute(

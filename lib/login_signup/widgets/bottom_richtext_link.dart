@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:uicomponentsforgwm/utils/constants.dart';
 
 class BottomRichTextLink extends StatelessWidget {
   final String text;
@@ -29,10 +28,7 @@ class BottomRichTextLink extends StatelessWidget {
             text: clickableText,
             style: GoogleFonts.poppins(
               fontWeight: FontWeight.bold,
-              foreground: Paint()
-                ..shader = kGradient.createShader(
-                  const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0),
-                ),
+              color: const Color(0xFFC8B2D6),
             ),
             recognizer: TapGestureRecognizer()..onTap = onTap,
           ),
